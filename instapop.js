@@ -32,7 +32,7 @@ const email_bookmark = (bookmark, mailgun_client, mailgun_domain, to_address) =>
 
 // returns a promise
 const archive_bookmark = (bookmark, instapaper_client) => {
-  return instapaper_client.bookmarks.archive(bookmark.GET_ID_TODO);
+  return instapaper_client.bookmarks.archive(bookmark.bookmark_id);
 };
 
 module.exports = function(context, cb) {
@@ -49,6 +49,7 @@ module.exports = function(context, cb) {
 
   instapaper_client.bookmarks
     .list({ limit: 500 })
+    .then(response => response.bookmarks)
     .then(random_element)
     .then(bookmark =>
       email_bookmark(bookmark, mailgun_client, secrets.mailgun_domain, secrets.to_address))
