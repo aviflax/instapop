@@ -18,13 +18,13 @@ const random_element = array => {
 // returns a promise that in the success case “returns” the bookmark, for chaining, and in the error
 // case “returns” an error object of some kind.
 const email_bookmark = (bookmark, mailgun_client, mailgun_domain, to_address) => {
-  const from_header = "Instapop <instapop@" + mailgun_domain + ">";
+  const from_header = `Instapop <instapop@${mailgun_domain}>`;
 
   const email = {
     from: from_header,
     to: to_address,
-    subject: "Your daily pop:",
-    text: "Testing some Mailgun awesomness!"
+    subject: `Your daily pop: ${bookmark.title}`,
+    text: `${bookmark.title}\n\n${bookmark.description}\n\n${bookmark.url}`
   };
 
   return mailgun.messages().send(email).then(_body => bookmark).catch(err => err);
