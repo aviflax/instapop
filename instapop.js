@@ -31,8 +31,8 @@ const email_bookmark = (bookmark, mailgun_client, mailgun_domain, to_address) =>
 };
 
 // returns a promise
-const delete_bookmark = (bookmark, instapaper_client) => {
-  return instapaper_client.bookmarks.delete(bookmark.GET_ID_TODO);
+const archive_bookmark = (bookmark, instapaper_client) => {
+  return instapaper_client.bookmarks.archive(bookmark.GET_ID_TODO);
 };
 
 module.exports = function(context, cb) {
@@ -52,7 +52,7 @@ module.exports = function(context, cb) {
     .then(random_element)
     .then(bookmark =>
       email_bookmark(bookmark, mailgun_client, secrets.mailgun_domain, secrets.to_address))
-    .then(bookmark => delete_bookmark(bookmark, instapaper_client))
+    .then(bookmark => archive_bookmark(bookmark, instapaper_client))
     .then(() => cb(null, null))
     .catch(err => cb(err, null));
 };
