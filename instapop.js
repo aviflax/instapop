@@ -18,16 +18,14 @@ const random_element = array => {
 // returns a promise that in the success case “returns” the bookmark, for chaining, and in the error
 // case “returns” an error object of some kind.
 const email_bookmark = (bookmark, mailgun_client, mailgun_domain, to_address) => {
-  const from_header = `Instapop <instapop@${mailgun_domain}>`;
-
   const email = {
-    from: from_header,
+    from: `Instapop <instapop@${mailgun_domain}>`,
     to: to_address,
     subject: `Your daily pop: ${bookmark.title}`,
     text: `${bookmark.title}\n\n${bookmark.description}\n\n${bookmark.url}`
   };
 
-  return mailgun.messages().send(email).then(_body => bookmark).catch(err => err);
+  return mailgun_client.messages().send(email).then(_body => bookmark).catch(err => err);
 };
 
 // returns a promise
@@ -47,6 +45,8 @@ module.exports = function(context, cb) {
 
   const mailgun_client = create_mailgun_client(secrets.mailgun_api_key, secrets.mailgun_domain);
 
+  // If there are more than 500 bookmarks, this won’t get all of them. But the Instapaper API has a
+  // very odd list interface... strange paging, no sorting. So whatever, I can live with this.
   instapaper_client.bookmarks
     .list({ limit: 500 })
     .then(response => response.bookmarks)
