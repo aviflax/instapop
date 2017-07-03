@@ -48,7 +48,7 @@ module.exports = function(context, cb) {
   const mailgun_client = create_mailgun_client(secrets.mailgun_api_key, secrets.mailgun_domain);
 
   instapaper_client.bookmarks
-    .list()
+    .list({ limit: 500 })
     .then(random_element)
     .then(bookmark =>
       email_bookmark(bookmark, mailgun_client, secrets.mailgun_domain, secrets.to_address))
