@@ -1,6 +1,8 @@
 const instapaper = require("instapaper");
 const mailgun = require("mailgun-js");
 
+const INSTAPAPER_API_LIST_LIMIT_MAX = 500; // see https://www.instapaper.com/api/full
+
 const create_instapaper_client = (key, secret, username, password) => {
   const client = instapaper(key, secret);
   client.setUserCredentials(username, password);
@@ -45,10 +47,11 @@ module.exports = function(context, cb) {
 
   const mailgun_client = create_mailgun_client(secrets.mailgun_api_key, secrets.mailgun_domain);
 
-  // If there are more than 500 bookmarks, this won’t get all of them. But the Instapaper API has a
-  // very odd list interface... strange paging, no sorting. So whatever, I can live with this.
+  // If there are more than INSTAPAPER_API_LIST_LIMIT_MAX bookmarks, this won’t get all of them. But
+  // the Instapaper API has a very odd list interface... strange paging, no sorting. So whatever, I
+  // can live with this.
   instapaper_client.bookmarks
-    .list({ limit: 500 })
+    .list({ limit: INSTAPAPER_API_LIST_LIMIT_MAX })
     .then(response => response.bookmarks)
     .then(random_element)
     .then(bookmark =>
