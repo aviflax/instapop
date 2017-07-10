@@ -52,7 +52,7 @@ module.exports = function(context, cb) {
   // can live with this.
   instapaper_client.bookmarks
     .list({ limit: INSTAPAPER_API_LIST_LIMIT_MAX })
-    .then(response => response.bookmarks)
+    .then(response => response.slice(2))
     .then(random_element)
     .then(bookmark =>
       email_bookmark(bookmark, mailgun_client, secrets.mailgun_domain, secrets.to_address))
