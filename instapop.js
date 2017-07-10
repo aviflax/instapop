@@ -23,7 +23,7 @@ const email_bookmark = (bookmark, mailgun_client, mailgun_domain, to_address) =>
   const email = {
     from: `Instapop <instapop@${mailgun_domain}>`,
     to: to_address,
-    subject: `Your daily pop: ${bookmark.title}`,
+    subject: `Today’s pop: ${bookmark.title}`,
     text: `${bookmark.title}\n\n${bookmark.description}\n\n${bookmark.url}`
   };
 
